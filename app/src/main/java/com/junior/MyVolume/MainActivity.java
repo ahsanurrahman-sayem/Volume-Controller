@@ -3,13 +3,14 @@ package com.junior.MyVolume;
 import android.app.Activity;
 import android.content.Context;
 import android.media.AudioManager;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.KeyEvent;
-import android.view.View;
 import android.widget.SeekBar;
 import android.widget.TextView;
 
 public class MainActivity extends Activity {
+
 	SeekBar seekbar;
 	TextView textView;
 	AudioManager audioManager;
@@ -18,57 +19,52 @@ public class MainActivity extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);
+
 		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
 
 		textView = findViewById(R.id.val);
 		seekbar = findViewById(R.id.layout2SeekBar1);
 
-		seekbar.setMax(getMaxVolume());
-		seekbar.setMin(getMinVolume());
+		int max = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+		seekbar.setMax(max);
 
-		textView.setText(textView.getText().toString() + " " + getCurrentVolume() + " of " + getMaxVolume());
-		seekbar.setProgress(getCurrentVolume());
+		textView.setText("VOLUME: " + audioManager.getStreamVolume(
+			AudioManager.STREAM_MUSIC) + " of " + max);
 
-		//mainWork!!!
+		seekbar.setProgress(audioManager.getStreamVolume(
+			AudioManager.STREAM_MUSIC));
+
 		seekbar.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
-			@Override
-			public void onProgressChanged(SeekBar arg0, int arg1, boolean arg2) {
-
-				textView.setText("VOLUME : " + arg1 + " of " + getMaxVolume());
-				audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, arg1, AudioManager.ADJUST_SAME);
-				audioManager.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.STREAM_MUSIC);
-				seekbar.setProgress(getCurrentVolume());
+			@Override public void onProgressChanged(SeekBar sb, int progress, boolean fromUser) {
+				if (fromUser) {
+					audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+						progress, AudioManager.FLAG_SHOW_UI);
+					textView.setText("VOLUME: " + progress + " of " + max);
+				}
 			}
-
-			@Override
-			public void onStartTrackingTouch(SeekBar arg0) {
-			}
-
-			@Override
-			public void onStopTrackingTouch(SeekBar arg0) {
-			}
-
+			@Override public void onStartTrackingTouch(SeekBar sb) {}
+			@Override public void onStopTrackingTouch(SeekBar sb) {}
 		});
-
 	}
 
-	@Override
-	public boolean dispatchKeyEvent(KeyEvent arg0) {
-
-		if (arg0.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP && arg0.getAction() == KeyEvent.ACTION_UP) {
-			/*seekbar.setProgress(seekbar.getProgress() + 1);
-			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, seekbar.getProgress(), AudioManager.ADJUST_SAME);
-			audioManager.adjustVolume(seekbar.getProgress(), AudioManager.STREAM_MUSIC);*/
-			upVolume();
+	@Override public boolean dispatchKeyEvent(KeyEvent event) {
+		if (event.getAction() == KeyEvent.ACTION_UP) {
+			int volume = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+			if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_UP) {
+				volume = Math.min(volume + 1,
+					audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
+			} else if (event.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN) {
+				volume = Math.max(volume - 1, 0);
+			}
+			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+				volume, AudioManager.FLAG_SHOW_UI);
+			seekbar.setProgress(volume);
+			textView.setText("VOLUME: " + volume + " of " +
+				audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC));
 		}
-		if (arg0.getKeyCode() == KeyEvent.KEYCODE_VOLUME_DOWN && arg0.getAction() == KeyEvent.ACTION_UP) {
-			seekbar.setProgress(seekbar.getProgress() - 1);
-			audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, seekbar.getProgress(), AudioManager.ADJUST_LOWER);
-			audioManager.adjustVolume(seekbar.getProgress(), AudioManager.STREAM_MUSIC);
-		}
-		return super.dispatchKeyEvent(arg0);
+		return super.dispatchKeyEvent(event);
 	}
-
+}
 	/*	CUSTOM FUNCTION SECTION	*/
 
 	public void upVolume() {
