@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_new_final"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication" >
-        <receiver android:name=".WidgetAPI">
+		<receiver android:name=".WidgetAPI" android:exported="false">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
             </intent-filter>
