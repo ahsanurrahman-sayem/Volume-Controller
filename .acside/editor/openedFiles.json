@@ -1,0 +1,110 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/app/src/main/java/com/junior/MyVolume/MyQSTileService.java",
+      "selection": {
+        "end": {
+          "column": 34,
+          "index": 96,
+          "line": 3
+        },
+        "start": {
+          "column": 34,
+          "index": 96,
+          "line": 3
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/app/src/main/java/com/junior/MyVolume/MainActivity.java",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 603,
+          "line": 23
+        },
+        "start": {
+          "column": 0,
+          "index": 603,
+          "line": 23
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/app/src/main/AndroidManifest.xml",
+      "selection": {
+        "end": {
+          "column": 23,
+          "index": 124,
+          "line": 2
+        },
+        "start": {
+          "column": 23,
+          "index": 124,
+          "line": 2
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/app/src/main/res/xml/provider.xml",
+      "selection": {
+        "end": {
+          "column": 25,
+          "index": 411,
+          "line": 11
+        },
+        "start": {
+          "column": 25,
+          "index": 411,
+          "line": 11
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/app/src/main/res/layout/m_layout.xml",
+      "selection": {
+        "end": {
+          "column": 15,
+          "index": 507,
+          "line": 14
+        },
+        "start": {
+          "column": 15,
+          "index": 507,
+          "line": 14
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/.github/workflows/android-release.yml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    },
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/.github/workflows/android.yml",
+      "selection": {
+        "end": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        },
+        "start": {
+          "column": 0,
+          "index": 0,
+          "line": 0
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/.github/workflows/android.yml"
+}
