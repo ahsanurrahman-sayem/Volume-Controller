@@ -18,6 +18,7 @@ jobs:
          id: extract_tag
          run: |
             echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV   
+            
       - name: Checkout repository
         uses: actions/checkout@v4
 
