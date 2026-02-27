@@ -1,0 +1,20 @@
+{
+  "allFiles": [
+    {
+      "file": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/settings.gradle",
+      "selection": {
+        "end": {
+          "column": 1,
+          "index": 365,
+          "line": 15
+        },
+        "start": {
+          "column": 1,
+          "index": 365,
+          "line": 15
+        }
+      }
+    }
+  ],
+  "selectedFile": "/storage/emulated/0/AndroidIDEProjects/Volume-Controller/settings.gradle"
+}

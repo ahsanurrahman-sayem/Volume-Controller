@@ -64,7 +64,7 @@ public class MainActivity extends Activity {
 		}
 		return super.dispatchKeyEvent(event);
 	}
-}
+
 	/*	CUSTOM FUNCTION SECTION	*/
 
 	public void upVolume() {
