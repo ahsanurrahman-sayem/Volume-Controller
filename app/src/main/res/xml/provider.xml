@@ -5,10 +5,10 @@
 	android:layout="@layout/m_layout"
 	android:initialLayout="@layout/m_layout"
     android:minHeight="8dp"
-    android:minResizeWidth="40dp"
-    android:minResizeHeight="40dp"
-    android:maxResizeWidth="120dp"
-    android:maxResizeHeight="120dp"
-	android:resizeMode="horizontal|vertical" 
+    android:minResizeWidth="20dp"
+    android:minResizeHeight="20dp"
+    android:maxResizeWidth="20dp"
+    android:maxResizeHeight="20dp"
+	android:resizeMode="none" 
 	android:widgetCategory="home_screen">
 </appwidget-provider>

@@ -40,8 +40,8 @@ public class MyQSTileService extends TileService {
 	//	int count = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
 		//count++;
 	//	audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, count, AudioManager.ADJUST_SAME);
-		audioManager.adjustVolume(AudioManager.STREAM_MUSIC, AudioManager.FLAG_SHOW_UI);
-
+		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,audioManager.ADJUST_SAME ,AudioManager.FLAG_SHOW_UI);
+        Toast.makeText(getApplicationContext(),"Ui show",Toast.LENGTH_SHORT).show();
 		getQsTile().updateTile();
 	}
 

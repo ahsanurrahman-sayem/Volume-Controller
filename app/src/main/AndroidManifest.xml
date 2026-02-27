@@ -1,12 +1,11 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.junior.MyVolume"
-    android:versionCode="1"
-    android:versionName="1.0" >
+    android:versionCode="1.0.2"
+    android:versionName="1.0.2" >
 	<uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" />
 
     <uses-sdk
         android:minSdkVersion="16"
-        android:targetSdkVersion="34" />
+        android:targetSdkVersion="36" />
 
     <application
         android:allowBackup="true"
@@ -40,7 +39,9 @@
     android:icon="@drawable/no"
     android:label="@string/app_name"
     android:permission="android.permission.BIND_QUICK_SETTINGS_TILE"
-    android:exported="false">
+    android:exported="true">
+	<meta-data android:name="android.service.quicksettings.ACTIVE_TILE"
+         android:value="true" />
     <intent-filter>
         <action android:name="android.service.quicksettings.action.QS_TILE" />
     </intent-filter>

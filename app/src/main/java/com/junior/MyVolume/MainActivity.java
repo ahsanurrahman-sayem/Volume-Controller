@@ -43,7 +43,7 @@ public class MainActivity extends Activity {
 				}
 			}
 			@Override public void onStartTrackingTouch(SeekBar sb) {}
-			@Override public void onStopTrackingTouch(SeekBar sb) {}
+			@Override public void onStopTrackingTouch(SeekBar sb){}
 		});
 	}
 
