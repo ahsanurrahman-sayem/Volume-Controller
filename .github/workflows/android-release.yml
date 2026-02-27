@@ -14,6 +14,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+       - name: Extract Tag Name
+         id: extract_tag
+         run: |
+            echo "TAG_NAME=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV   
       - name: Checkout repository
         uses: actions/checkout@v4
 
@@ -38,8 +42,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v1.0.0
-          name: Volume Controller v1.0.0
+          tag_name: $TAG_NAME
+          name: Volume Controller $TAG_NAME
           files: app/build/outputs/apk/debug/app-debug.apk
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
