@@ -1,11 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     android:versionCode="1.0.2"
     android:versionName="1.0.2" >
 	<uses-permission android:name="android.permission.BIND_QUICK_SETTINGS_TILE" />
 
     <uses-sdk
-        android:minSdkVersion="16"
-        android:targetSdkVersion="36" />
+        android:minSdkVersion="23"
+        android:targetSdkVersion="37" />
 
     <application
         android:allowBackup="true"
@@ -14,7 +15,9 @@
         android:roundIcon="@mipmap/ic_new_final"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyApplication" >
-		<receiver android:name=".WidgetAPI">
+		
+		<receiver android:name=".WidgetAPI"
+		    android:exported="false">
 			<intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 		        <action android:name="com.junior.MyVolume.VOLUME_UP" />
@@ -23,7 +26,7 @@
             <meta-data
                 android:name="android.appwidget.provider"
                 android:resource="@xml/provider" />
-        </receiver>
+</receiver>
 
         <activity
             android:name=".MainActivity"

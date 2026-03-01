@@ -10,7 +10,6 @@ import android.widget.RemoteViews;
 
 public class WidgetAPI extends AppWidgetProvider {
 
-```
 // Action constants for button broadcasts
 public static final String ACTION_VOLUME_UP   = "com.junior.MyVolume.VOLUME_UP";
 public static final String ACTION_VOLUME_DOWN = "com.junior.MyVolume.VOLUME_DOWN";
@@ -92,7 +91,7 @@ private void updateWidget(Context context,
     int max     = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
 
     // Build the view
-    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.m_layout);
 
     // Show "current / max" in the volume text view
     views.setTextViewText(R.id.tv_volume, current + " / " + max);
@@ -116,6 +115,5 @@ private void updateWidget(Context context,
     // Push the updated views
     appWidgetManager.updateAppWidget(appWidgetId, views);
 }
-```
 
 }
