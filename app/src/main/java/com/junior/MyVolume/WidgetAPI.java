@@ -1,58 +1,121 @@
 package com.junior.MyVolume;
 
 import android.app.PendingIntent;
-import android.content.Intent;
 import android.appwidget.AppWidgetManager;
-import android.content.Context;
-
 import android.appwidget.AppWidgetProvider;
+import android.content.Context;
+import android.content.Intent;
 import android.media.AudioManager;
-import android.os.IBinder;
-import android.widget.Toast;
+import android.widget.RemoteViews;
 
 public class WidgetAPI extends AppWidgetProvider {
 
-	@Override
-	public void onEnabled(Context context) {
-		super.onEnabled(context);
-	}
+```
+// Action constants for button broadcasts
+public static final String ACTION_VOLUME_UP   = "com.junior.MyVolume.VOLUME_UP";
+public static final String ACTION_VOLUME_DOWN = "com.junior.MyVolume.VOLUME_DOWN";
 
-	@Override
-	public void onDisabled(Context context) {
-		super.onDisabled(context);
-	}
+// -----------------------------------------------------------------------
+// Widget lifecycle
+// -----------------------------------------------------------------------
 
-	@Override
-	public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-		super.onUpdate(context, appWidgetManager, appWidgetIds);
-		for (int i = 0; i < appWidgetIds.length; i++) {
-			int appWidgetId = appWidgetIds[i];
+@Override
+public void onEnabled(Context context) {
+    super.onEnabled(context);
+}
 
-			//Create an Intent to launch ExampleActivity
-			Intent intent = new Intent(context, WidgetAPI.class);
+@Override
+public void onDisabled(Context context) {
+    super.onDisabled(context);
+}
 
-			PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent,
-					PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+// -----------------------------------------------------------------------
+// onUpdate — called on first add and on every scheduled refresh
+// -----------------------------------------------------------------------
 
-			context.startActivity(intent);
+@Override
+public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+    for (int appWidgetId : appWidgetIds) {
+        updateWidget(context, appWidgetManager, appWidgetId);
+    }
+}
 
-			//Toast.makeText(context,"Clicked",Toast.LENGTH_SHORT).show();		
-		}
-		AudioManager audioManager = (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-		int count = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, count, AudioManager.ADJUST_SAME);
-		audioManager.adjustVolume(AudioManager.ADJUST_SAME, AudioManager.STREAM_MUSIC);
-	}
+// -----------------------------------------------------------------------
+// onReceive — handles button-press broadcast actions
+// -----------------------------------------------------------------------
 
-	@Override
-	public IBinder peekService(Context myContext, Intent service) {
-		Toast.makeText(myContext, service.getAction().toString(), Toast.LENGTH_SHORT).show();
-		return super.peekService(myContext, service);
-	}
+@Override
+public void onReceive(Context context, Intent intent) {
+    super.onReceive(context, intent); // handles standard AppWidget broadcasts
 
-	@Override
-	public void onReceive(Context context, Intent intent) {
-		super.onReceive(context, intent);
-	}
+    String action = intent.getAction();
+    if (action == null) return;
+
+    AudioManager audioManager =
+            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+    if (ACTION_VOLUME_UP.equals(action)) {
+        audioManager.adjustStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                AudioManager.ADJUST_RAISE,
+                AudioManager.FLAG_SHOW_UI
+        );
+    } else if (ACTION_VOLUME_DOWN.equals(action)) {
+        audioManager.adjustStreamVolume(
+                AudioManager.STREAM_MUSIC,
+                AudioManager.ADJUST_LOWER,
+                AudioManager.FLAG_SHOW_UI
+        );
+    }
+
+    // Refresh all widget instances to show the updated volume level
+    AppWidgetManager manager = AppWidgetManager.getInstance(context);
+    int[] ids = manager.getAppWidgetIds(
+            new android.content.ComponentName(context, WidgetAPI.class));
+    for (int id : ids) {
+        updateWidget(context, manager, id);
+    }
+}
+
+// -----------------------------------------------------------------------
+// Helper — build and push RemoteViews for a single widget instance
+// -----------------------------------------------------------------------
+
+private void updateWidget(Context context,
+                          AppWidgetManager appWidgetManager,
+                          int appWidgetId) {
+
+    AudioManager audioManager =
+            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+
+    int current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+    int max     = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+
+    // Build the view
+    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.widget_layout);
+
+    // Show "current / max" in the volume text view
+    views.setTextViewText(R.id.tv_volume, current + " / " + max);
+
+    // Wire up Volume Up button
+    Intent upIntent = new Intent(context, WidgetAPI.class);
+    upIntent.setAction(ACTION_VOLUME_UP);
+    PendingIntent upPending = PendingIntent.getBroadcast(
+            context, 0, upIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    views.setOnClickPendingIntent(R.id.btn_volume_up, upPending);
+
+    // Wire up Volume Down button
+    Intent downIntent = new Intent(context, WidgetAPI.class);
+    downIntent.setAction(ACTION_VOLUME_DOWN);
+    PendingIntent downPending = PendingIntent.getBroadcast(
+            context, 1, downIntent,
+            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    views.setOnClickPendingIntent(R.id.btn_volume_down, downPending);
+
+    // Push the updated views
+    appWidgetManager.updateAppWidget(appWidgetId, views);
+}
+```
 
 }
