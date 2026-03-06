@@ -10,110 +10,63 @@ import android.widget.RemoteViews;
 
 public class WidgetAPI extends AppWidgetProvider {
 
-// Action constants for button broadcasts
-public static final String ACTION_VOLUME_UP   = "com.junior.MyVolume.VOLUME_UP";
-public static final String ACTION_VOLUME_DOWN = "com.junior.MyVolume.VOLUME_DOWN";
+    public static final String ACTION_SHOW_VOLUME = "com.junior.MyVolume.SHOW_VOLUME";
 
-// -----------------------------------------------------------------------
-// Widget lifecycle
-// -----------------------------------------------------------------------
-
-@Override
-public void onEnabled(Context context) {
-    super.onEnabled(context);
-}
-
-@Override
-public void onDisabled(Context context) {
-    super.onDisabled(context);
-}
-
-// -----------------------------------------------------------------------
-// onUpdate — called on first add and on every scheduled refresh
-// -----------------------------------------------------------------------
-
-@Override
-public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-    for (int appWidgetId : appWidgetIds) {
-        updateWidget(context, appWidgetManager, appWidgetId);
-    }
-}
-
-// -----------------------------------------------------------------------
-// onReceive — handles button-press broadcast actions
-// -----------------------------------------------------------------------
-
-@Override
-public void onReceive(Context context, Intent intent) {
-    super.onReceive(context, intent); // handles standard AppWidget broadcasts
-
-    String action = intent.getAction();
-    if (action == null) return;
-
-    AudioManager audioManager =
-            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-
-    if (ACTION_VOLUME_UP.equals(action)) {
-        audioManager.adjustStreamVolume(
-                AudioManager.STREAM_MUSIC,
-                AudioManager.ADJUST_RAISE,
-                AudioManager.FLAG_SHOW_UI
-        );
-    } else if (ACTION_VOLUME_DOWN.equals(action)) {
-        audioManager.adjustStreamVolume(
-                AudioManager.STREAM_MUSIC,
-                AudioManager.ADJUST_LOWER,
-                AudioManager.FLAG_SHOW_UI
-        );
+    @Override
+    public void onEnabled(Context context) {
+        super.onEnabled(context);
     }
 
-    // Refresh all widget instances to show the updated volume level
-    AppWidgetManager manager = AppWidgetManager.getInstance(context);
-    int[] ids = manager.getAppWidgetIds(
-            new android.content.ComponentName(context, WidgetAPI.class));
-    for (int id : ids) {
-        updateWidget(context, manager, id);
+    @Override
+    public void onDisabled(Context context) {
+        super.onDisabled(context);
     }
-}
 
-// -----------------------------------------------------------------------
-// Helper — build and push RemoteViews for a single widget instance
-// -----------------------------------------------------------------------
+    @Override
+    public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
+        for (int appWidgetId : appWidgetIds) {
+            updateWidget(context, appWidgetManager, appWidgetId);
+        }
+    }
 
-private void updateWidget(Context context,
-                          AppWidgetManager appWidgetManager,
-                          int appWidgetId) {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        super.onReceive(context, intent);
 
-    AudioManager audioManager =
-            (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+        String action = intent.getAction();
+        if (action == null) return;
 
-    int current = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-    int max     = audioManager.getStreamMaxVolume(AudioManager.STREAM_MUSIC);
+        if (ACTION_SHOW_VOLUME.equals(action)) {
+            AudioManager audioManager =
+                    (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
+            audioManager.adjustStreamVolume(
+                    AudioManager.STREAM_MUSIC,
+                    AudioManager.ADJUST_SAME,
+                    AudioManager.FLAG_SHOW_UI
+            );
+        }
 
-    // Build the view
-    RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.m_layout);
+        AppWidgetManager manager = AppWidgetManager.getInstance(context);
+        int[] ids = manager.getAppWidgetIds(
+                new android.content.ComponentName(context, WidgetAPI.class));
+        for (int id : ids) {
+            updateWidget(context, manager, id);
+        }
+    }
 
-    // Show "current / max" in the volume text view
-    views.setTextViewText(R.id.tv_volume, current + " / " + max);
+    private void updateWidget(Context context,
+                              AppWidgetManager appWidgetManager,
+                              int appWidgetId) {
 
-    // Wire up Volume Up button
-    Intent upIntent = new Intent(context, WidgetAPI.class);
-    upIntent.setAction(ACTION_VOLUME_UP);
-    PendingIntent upPending = PendingIntent.getBroadcast(
-            context, 0, upIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-    views.setOnClickPendingIntent(R.id.btn_volume_up, upPending);
+        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.m_layout);
 
-    // Wire up Volume Down button
-    Intent downIntent = new Intent(context, WidgetAPI.class);
-    downIntent.setAction(ACTION_VOLUME_DOWN);
-    PendingIntent downPending = PendingIntent.getBroadcast(
-            context, 1, downIntent,
-            PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
-    views.setOnClickPendingIntent(R.id.btn_volume_down, downPending);
+        Intent intent = new Intent(context, WidgetAPI.class);
+        intent.setAction(ACTION_SHOW_VOLUME);
+        PendingIntent pending = PendingIntent.getBroadcast(
+                context, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+        views.setOnClickPendingIntent(R.id.tv_volume, pending);
 
-    // Push the updated views
-    appWidgetManager.updateAppWidget(appWidgetId, views);
-}
-
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
 }
