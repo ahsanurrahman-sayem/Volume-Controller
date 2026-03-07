@@ -20,8 +20,7 @@
 		    android:exported="false">
 			<intent-filter>
 		        <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-		        <action android:name="com.junior.MyVolume.VOLUME_UP" />
-		        <action android:name="com.junior.MyVolume.VOLUME_DOWN" />
+		        <action android:name="com.junior.MyVolume.VOLUME_UI" />
 		    </intent-filter>
             <meta-data
                 android:name="android.appwidget.provider"

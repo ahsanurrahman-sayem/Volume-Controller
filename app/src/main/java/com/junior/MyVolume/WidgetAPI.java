@@ -7,10 +7,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.media.AudioManager;
 import android.widget.RemoteViews;
+import com.junior.MyVolume.ArsAudioManager;
 
 public class WidgetAPI extends AppWidgetProvider {
 
-    public static final String ACTION_SHOW_VOLUME = "com.junior.MyVolume.SHOW_VOLUME";
+    public static final String ACTION_SHOW_VOLUME_UI = "com.junior.MyVolume.VOLUME_UI";
 
     @Override
     public void onEnabled(Context context) {
@@ -32,19 +33,12 @@ public class WidgetAPI extends AppWidgetProvider {
     @Override
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
-
         String action = intent.getAction();
         if (action == null) return;
 
-        if (ACTION_SHOW_VOLUME.equals(action)) {
-            AudioManager audioManager =
-                    (AudioManager) context.getSystemService(Context.AUDIO_SERVICE);
-            audioManager.adjustStreamVolume(
-                    AudioManager.STREAM_MUSIC,
-                    AudioManager.ADJUST_SAME,
-                    AudioManager.FLAG_SHOW_UI
-            );
-        }
+		if(ACTION_SHOW_VOLUME_UI.equals(action)){
+			ArsAudioManager.showVolumeSlider(context);
+		}
 
         AppWidgetManager manager = AppWidgetManager.getInstance(context);
         int[] ids = manager.getAppWidgetIds(
@@ -61,7 +55,7 @@ public class WidgetAPI extends AppWidgetProvider {
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.m_layout);
 
         Intent intent = new Intent(context, WidgetAPI.class);
-        intent.setAction(ACTION_SHOW_VOLUME);
+        intent.setAction(ACTION_SHOW_VOLUME_UI);
         PendingIntent pending = PendingIntent.getBroadcast(
                 context, 0, intent,
                 PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);

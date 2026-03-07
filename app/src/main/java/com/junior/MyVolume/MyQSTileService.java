@@ -5,6 +5,7 @@ import android.media.AudioManager;
 import android.service.quicksettings.Tile;
 import android.service.quicksettings.TileService;
 import android.widget.Toast;
+import com.junior.MyVolume.ArsAudioManager;
 
 public class MyQSTileService extends TileService {
 	AudioManager audioManager;
@@ -36,13 +37,7 @@ public class MyQSTileService extends TileService {
 	@Override
 	public void onClick() {
 		super.onClick();
-		audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
-	//	int count = audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
-		//count++;
-	//	audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, count, AudioManager.ADJUST_SAME);
-		audioManager.adjustStreamVolume(AudioManager.STREAM_MUSIC,audioManager.ADJUST_SAME ,AudioManager.FLAG_SHOW_UI);
-        Toast.makeText(getApplicationContext(),"Ui show",Toast.LENGTH_SHORT).show();
-		getQsTile().updateTile();
+		ArsAudioManager.showVolumeSlider(getApplicationContext());
 	}
 
 	// Called when the user removes your tile.
