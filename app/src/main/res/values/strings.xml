@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Sound</string>
+	<string name="img_desc">Volume Image</string>
 </resources>
